@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="dependencies/style.css">
+	<script type="text/javascript" src="dependencies/jquery.js"></script>
+	<title>Program Koperasi</title>
+</head>
+<body>
+	<h1 class="title">PROGRAM KOPERASI</h1>
+	<div class="login-box">
+		<label for="username">USERNAME</label>
+		<input type="text" name="username" id="username" placeholder="Username">
+		<label for="password">PASSWORD</label>
+		<input type="password" name="password" id="password" placeholder="Password">
+		<div class="login-btn button"><p>MASUK</p></div>
+	</div>
+	<script>
+		$(document).ready(()=>{
+			$('#username').keyup((event)=> {if (event.which === 13) {$('#password').focus();}});
+			$('#password').keyup((event)=> {if (event.which === 13) {$('.login-btn').click();}});
+			$('.login-btn').click(()=>{
+				$.ajax({url: 'http://localhost:8000/login', type: 'POST', contentType: 'application/json', data: JSON.stringify({"username": $("#username").val(), "password": $("#password").val()})})
+				.then((res)=>{
+					if (res === 'FAILED') {
+						alert('username atau password salah !');
+						$('#username').val(null);
+						$('#password').val(null);
+					}else if (
+						res.match('user') !== null 
+						&& res.match('authorize') !== null
+						){
+						localStorage.setItem('Auth', res);
+						location.replace('index.html');
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

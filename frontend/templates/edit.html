@@ -1,0 +1,15 @@
+<h2>Nama Barang</h2>
+<input type="text" name="nama_barang" id="nama_barang" placeholder="Nama Barang. Example: Topi Sekolah" required>
+<h2>Qty</h2>
+<input type="number" name="qty" id="qty" placeholder="Qty. Example: 123" min="0" required>
+<h2>Modal</h2>
+<input type="number" name="harga_beli" id="harga_beli" placeholder="Modal. Example: 123000" min="1" required>
+<h2>Harga Jual</h2>
+<input type="number" name="harga_jual" id="harga_jual" placeholder="Harga Jual. Example: 123000" min="1" required>
+
+<script>
+	$('#nama_barang').keyup((event) => {if(event.which === 13){$('#qty').focus();}});
+	$('#qty').keyup((event) => {if(event.which === 13){$('#harga_beli').focus();}});
+	$('#harga_beli').keyup((event) => {if(event.which === 13){$('#harga_jual').focus();}});
+	$('#harga_jual').keyup((event) => {if(event.which === 13){$('.save-button').click();}});
+</script>

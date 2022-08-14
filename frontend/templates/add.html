@@ -1,0 +1,6 @@
+<h2>TAMBAH</h2>
+<input type="number" name="qty" id="qty" min="1" placeholder="Qty. Example: 111">
+<div class="button qty-add-btn"><p>TAMBAH</p></div>
+<script>
+	$('#qty').keyup((event) => {if(event.which === 13){$('.qty-add-btn').click();}});
+</script>

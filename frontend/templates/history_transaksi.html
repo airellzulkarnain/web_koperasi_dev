@@ -1,0 +1,109 @@
+<table class="menu-3">
+	<tr>
+		<td colspan="2">
+			<h2>HISTORY PEMBELIAN</h2>
+			<div class="history-pembelian">
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="preview-laporan">
+				<h2>PREVIEW LAPORAN</h2>
+				<div class="box"></div>
+				<h2>TOTAL PROFIT: Rp. </h2>
+			</div>
+		</td>
+		<td>
+			<h2>DARI: </h2>
+			<input type="date" name="from_" id="from_" pattern="\d{4}-\d{2}-\d{2}">
+			<h2>SAMPAI: </h2>
+			<input type="date" name="to_" id="to_" pattern="\d{4}-\d{2}-\d{2}">
+			<div class="button btn-buat-laporan"><p>BUAT LAPORAN</p></div>
+		</td>
+	</tr>
+</table>
+<script type="module">
+	import {convert_readable_num} from './dependencies/readable_num.mjs';
+	$(document).ready(()=>{
+		function load_profit(from_, to_){
+			let URL = "http://localhost:8000/get_profit";
+			if (from_ !== undefined && to_ !== undefined){
+				URL += `?from_=${from_}&to_=${to_}`;
+			}
+			$.ajax({url: URL, contentType: "application/json", type: "GET", headers: {'token': localStorage.getItem('Auth')}}).then((res)=>{
+				let total_profit = 0;
+				$('.box').empty();
+				for (let profit of res){
+					$(`
+						<div>
+							<p>Nama Barang: ${profit.nama_barang}</p>
+							<p>Terjual: ${profit.qty_terjual}</p>
+							<p>Profit: ${convert_readable_num(profit.profit)}</p>
+						</div>
+						`)
+					.addClass('barang')
+					.appendTo('.box');
+					total_profit += profit.profit;
+				}
+				$(".container table.menu-3 .preview-laporan h2:nth-child(3)").text(`TOTAL PROFIT: ${convert_readable_num(total_profit)}`);
+			});
+		}
+		function load_history(from_, to_){
+			let URL = "http://localhost:8000/transaction_history";
+			if (from_ !== undefined && to_ !== undefined){
+				URL += `?from_=${from_}&to_=${to_}`;
+			}
+			$.ajax({url: URL, contentType: 'application/json', type: 'GET', headers: {'token': localStorage.getItem('Auth')}})
+			.then((res)=>{
+				$(".history-pembelian").empty();
+				for (let history_ of res) {
+					$(`
+				<div>
+					<p>Nama Barang: ${history_.nama_barang}</p>
+					<p>Qty Pembelian: ${history_.qty_pembelian}</p>
+					<p>Modal: ${convert_readable_num(history_.harga_beli)}</p>
+					<p>Harga Jual: ${convert_readable_num(history_.harga_jual)}</p>
+					<p>Nama Pembeli: ${history_.nama_pembeli}</p>
+				</div>
+				`)
+			.addClass('barang')
+			.appendTo('.history-pembelian');
+				}
+			});
+		}
+		load_history();
+		load_profit();
+		$('#from_').change(()=>{
+			if($('#to_').val() !== ''){
+				load_history($("#from_").val(), $("#to_").val());
+				load_profit($("#from_").val(), $("#to_").val());
+		}
+		});
+		$('#to_').change(()=>{
+			if($('#from_').val() !== ''){
+				load_history($("#from_").val(), $("#to_").val());
+				load_profit($("#from_").val(), $("#to_").val());
+		}
+		});
+
+		$(".btn-buat-laporan").click(()=>{
+			if($("#from_").val() !== '' 
+				&& $("#to_").val() !== '' 
+				&& $(".box").text() !== '') {
+				fetch(`http://localhost:8000/report?from_=${$("#from_").val()}&to_=${$("#to_").val()}`, {method: "GET", headers: {'token': localStorage.getItem('Auth')}}).then(res => {if (res.ok) {return res.blob();}})
+			.then((res)=>{
+				let url = URL.createObjectURL(res);
+				let date = new Date();
+				date = date.toISOString();
+				let link = document.createElement('a');
+				link.href = url;
+
+				link.download = `${date}.pdf`;
+				link.click();
+				URL.revokeObjectURL(url);
+				});
+			}
+		});
+	});
+</script>

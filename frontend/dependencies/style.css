@@ -1,0 +1,659 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+body {
+	font-family: Arial;
+}
+
+.navbar-base {
+	width: 140px;
+	height: 100%;
+	padding-top: 12px;
+	background-color: white;
+	position: fixed;
+	z-index: 100;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	background-color: #d7d7d7;
+}
+
+.navbar-items li, .navbar-items {
+	float: left;
+	display: inline-block;
+}
+
+.navbar-items li {
+	position: relative;
+}
+
+.navbar-items li div {
+	width: 140px;
+	height: 34px;
+	background-color: #eeeeee;
+	text-align: center;
+	line-height: 34px;
+	font-weight: bold;
+	border-radius: 20px 0 0 20px;
+	cursor: pointer;
+	transition-duration: 0.3s;
+}
+
+.navbar-items li div:hover {
+	color: #fff;
+}
+
+
+/*.navbar-items li div {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}*/
+
+.clearfix::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.logout {
+	display: inline-block;
+	position: absolute;
+	transform: translateX(-50%);
+	left: 50%;
+	bottom: 12px;
+	line-height: 30px;
+	font-weight: bold;
+	margin-right: 10px;
+	cursor: pointer;
+	transition-duration: 0.3s;
+}
+
+.logout:hover {
+	color: #d7d7d7;
+}
+
+.active-link {
+	background-color: #d7d7d7 !important;
+	color: #fff;
+}
+
+.container {
+	padding: 10px 10px 10px 140px;
+	box-sizing: border-box;
+}
+
+
+.container table.menu-1, .container table.menu-2{
+	width: 100%;
+	height: 100%;
+}
+
+.container table.menu-1 td:nth-of-type(1) {
+	padding: 15px;
+	width: 70%;
+	box-sizing: border-box;
+	vertical-align: top;
+}
+
+.container table.menu-1 td:nth-of-type(2) {
+	padding: 15px;
+	padding-left: 0px;
+	width: 30%;
+	box-sizing: border-box;
+	vertical-align: top;
+}
+
+.container .stock-barang {
+	width: 100%;
+	height: 100%;
+	background-color: #aaa;
+	border-radius: 15px;
+	overflow-y: scroll;
+}
+
+.container .barang {
+	width: calc(100% - 10px);
+	height: 34px;
+	border-radius: 15px;
+	margin: 5px auto;
+	padding: 0 4px;
+	position: relative;
+	box-sizing: border-box;
+	background-color: #fff;
+	vertical-align: middle;
+	transition-duration: 0.3s;
+}
+
+.container .barang p {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	border-radius: 10px;
+	transform: translateY(-50%);
+}
+
+.container .edit-add {
+	background-color: #aaa;
+	width: 100%;
+	height: 50%;
+	border-radius: 15px;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.container .barang:hover, 
+.container .barang-active, 
+.add-btn:hover {
+	border: 2px solid black;
+	background-color: #eee;
+}
+
+.button {
+	width: 100%;
+	height: calc(12.5% - 10px);
+	border-radius: 15px;
+	font-weight: bold;
+	position: relative;
+	cursor: pointer;
+	background-color: #fff;
+	margin: 10px 0;
+	transition-duration: 0.3s;
+}
+
+.button:hover {
+	color: #dfdfdf;
+}
+
+.button p {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.add-btn {
+	background-color: white;
+	width: 50px;
+	height: 50px;
+	margin: 6px auto;
+	border-radius: 15px;
+	position: relative;
+	cursor: pointer;
+	box-sizing: border-box;
+	transition-duration: 0.3s;
+}
+
+.add-btn > svg {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.save-button {
+	background-color: #aaa;
+}
+
+.edit-button, .delete-button {
+	background-color: #eee;
+}
+
+.cancel-button {
+	background-color: #fff;
+}
+
+.container .stock-barang .barang p:nth-of-type(1){left: 2%;}
+.container .stock-barang .barang p:nth-of-type(2){left: 25%;}
+.container .stock-barang .barang p:nth-of-type(3){left: 38%;}
+.container .stock-barang .barang p:nth-of-type(4){left: 70%;}
+.edit-add input {
+	width: calc(100% - 30px);
+	height: 30px;
+	border: 1px solid black;
+	border-radius: 15px;
+	padding: 6px;
+	display: block;
+	margin: 5px auto 5px auto;
+}
+
+.qty-add-btn {
+	width: calc(100% - 30px);
+	height: 30px;
+	display: block;
+	margin: 5px auto 5px auto;
+	padding: 6px;
+}
+
+.container .edit-add h2 {
+	font-size: 15px;
+	font-weight: bolder;
+	margin-left: 10px;
+}
+
+.container table.menu-2 td {
+	padding: 5px;
+	box-sizing: border-box;
+}
+
+.container table.menu-2 tr:nth-of-type(1) {
+	height: 2%;
+}
+.container table.menu-2 tr:nth-of-type(2) {
+	height: 10%;
+}
+.container table.menu-2 tr:nth-of-type(3) {
+	height: 3%;
+}
+.container table.menu-2 tr:nth-of-type(4) {
+	height: 60%;
+}
+.container table.menu-2 tr:nth-of-type(5) {
+	height: 25%;
+}
+
+.confirm-beli-btn, .cancel-beli-btn {
+	height: calc(50% - 5px);
+}
+
+.confirm-beli-btn {
+	background-color: #aaa;
+	margin-top: 0;
+}
+
+.add-beli-btn {
+	height: calc(100% - 10px);
+	width: 10%;
+	margin: 0;
+	right: 0.5%;
+}
+
+.add-beli {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: #aaa;
+	border-radius: 15px;
+}
+
+.add-beli * {
+	position: absolute;
+	display: inline-block;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.add-beli input, .add-beli select {
+	height: calc(100% - 10px);
+	display: inline-block;
+	margin: 0;
+	padding: 6px;
+	border-radius: 15px;
+	box-sizing: border-box;
+	border: 1px solid black;
+
+}
+
+.container .records-beli {
+	width: 100%;
+	height: 100%;
+	background-color: #aaa;
+	border-radius: 15px;
+	overflow-y: scroll;
+}
+
+.container table.menu-2 td h2 {
+	font-size: 20px;
+	font-weight: bolder;
+	color: #000;
+}
+
+.container table.menu-2 td h1 {
+	font-size: 20px;
+	font-weight: bolder;
+	color: #000;
+	margin-top: 6px;
+}
+
+.container .add-beli select:nth-child(2) {
+	left: 12%;
+}
+.container .add-beli input:nth-child(4) {
+	left: 37%;
+}
+.container .add-beli input:nth-child(6) {
+	left: 62%;
+}
+
+.container .add-beli h2:nth-child(1) {
+	left: calc(12% - 140px);
+}
+.container .add-beli h2:nth-child(3) {
+	left: calc(37% - 130px);
+}
+.container .add-beli h2:nth-child(5) {
+	left: calc(60% - 130px);
+}
+
+.container table.menu-2 td .add-beli h2 {
+	font-size: 20px;
+	width: 140px;
+	display: block;
+	cursor: default;
+}
+
+.container .add-beli input, 
+.container .add-beli select, 
+.container .add-beli div  {
+	width: 140px;
+}
+
+@media screen and (max-width: 1115px) {
+	.container .add-beli h2:nth-child(1) {
+	left: calc(12% - 100px);
+}
+.container .add-beli h2:nth-child(3) {
+	left: calc(37% - 100px);
+}
+.container .add-beli h2:nth-child(5) {
+	left: calc(62% - 100px);
+}
+
+.container table.menu-2 td .add-beli h2 {
+	font-size: 20px;
+	width: 100px;
+	display: block;
+}
+}
+
+.container table.menu-2 tr td .records-beli {
+	padding: 10px 5px;
+	box-sizing: border-box;
+}
+
+
+.container table.menu-2 tr td .records-beli .barang p:nth-child(1) {	
+	left: 2%;
+}
+.container table.menu-2 tr td .records-beli .barang p:nth-child(2) {
+	left: 34%;
+}
+.container table.menu-2 tr td .records-beli .barang p:nth-child(3) {
+	left: 50%;
+}
+.container table.menu-2 tr td .records-beli .barang p:nth-child(4) {
+	left: 70%;
+}
+
+.container table.menu-2 tr td .records-beli .barang p {
+	cursor: default;
+}
+
+.container table.menu-3 {
+	width: 100%;
+	height: 100%;
+}
+
+.container table.menu-3 tr:nth-of-type(2) td:nth-child(1) {
+	width: 70%;
+}
+
+.container table.menu-3 tr:nth-of-type(2) td:nth-child(2) {
+	width: 30%;
+	box-sizing: border-box;
+}
+
+.container table.menu-3 tr:nth-of-type(1) td {
+	height: 60%;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.container table.menu-3 tr:nth-of-type(2) input {
+	display: block;
+	width: calc(100% - 10px);
+	height: calc(33.33% - 24px);
+	margin: 5px auto;
+	border-radius: 15px;
+	border: None;
+}
+
+.btn-buat-laporan {
+	width: calc(100% - 10px);
+	height: calc(33.33% - 24px);
+	margin: 10px auto 0 auto;
+	background: #aaa;
+}
+
+.container table.menu-3 tr:nth-of-type(2) h2 {
+	font-weight: bolder;
+	font-size: 16px;
+	margin-left: 4px;
+}
+
+.container table.menu-3 tr:nth-of-type(2) td {
+	padding: 10px;
+}
+
+.container table.menu-3 tr:nth-of-type(1) .history-pembelian {
+	width: 100%;
+	height: calc(100% - 24px);
+	background-color: #aaa;
+	border-radius: 15px;
+	padding: 10px;
+	box-sizing: border-box;
+	overflow-y: scroll;
+}
+
+.container table.menu-3 tr:nth-of-type(2) .preview-laporan {
+	width: 100%;
+	height: 100%;
+	background-color: #aaa;
+	border-radius: 15px;
+}
+
+.container table.menu-3 tr:nth-of-type(1) h2 {
+	font-size: 20px;
+	font-weight: bolder;
+	margin: 0 0 6px 4px;
+}
+
+.container table.menu-3 
+tr:nth-of-type(1) td 
+.history-pembelian 
+.barang p:nth-child(1) {
+	left: 2%;
+}
+
+.container table.menu-3 
+tr:nth-of-type(1) td 
+.history-pembelian 
+.barang p:nth-child(2) {
+	left: 24%;
+}
+
+.container table.menu-3 
+tr:nth-of-type(1) td 
+.history-pembelian 
+.barang p:nth-child(3) {
+	left: 42%;
+}
+
+.container table.menu-3 
+tr:nth-of-type(1) td 
+.history-pembelian 
+.barang p:nth-child(4) {
+	left: 62%;
+}
+
+.container table.menu-3 
+tr:nth-of-type(1) td 
+.history-pembelian 
+.barang p:nth-child(5) {
+	left: 82%;
+}
+
+.container table.menu-3 .preview-laporan {
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.preview-laporan .box {
+	width: 100%;
+	height: 70%;
+	background-color: #bbb;
+	border-radius: 15px;
+	overflow-y: scroll;
+	margin-bottom: 10px;
+}
+
+.container table.menu-3 .preview-laporan .box .barang {
+	height: 20px;
+}
+
+.container table.menu-3 .preview-laporan h2:nth-child(1) {
+	margin-bottom: 10px;
+	font-size: 20px;
+}
+
+.container table.menu-3 .preview-laporan .box .barang p:nth-child(1) {
+	left: 3%;
+}
+.container table.menu-3 .preview-laporan .box .barang p:nth-child(2) {
+	left: 44%;
+}
+.container table.menu-3 .preview-laporan .box .barang p:nth-child(3) {
+	left: 62%;
+}
+
+.container table.menu-3 .preview-laporan h2:nth-child(3) {
+	text-align: right;
+}
+
+.login-box{
+	position: absolute;
+	width: 300px;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #aaa;
+	border-radius: 15px;
+	padding: 10px;
+
+}
+
+.title {
+	font-size: 30px;
+	font-weight: bolder;
+	position: absolute;
+	left: 50%;
+	margin-top: 100px;
+	transform: translateX(-50%);
+}
+
+.login-box input, .login-box div {
+	width: 100%;
+	display: block;
+	height: 40px;
+	box-sizing: border-box;
+	margin: 10px auto;
+	border-radius: 15px;
+	border: None;
+}
+
+.login-box input {
+	padding: 6px;
+	background-color: #eee;
+	border: 2px solid black;
+}
+
+.login-box div {
+	background-color: #222;
+	color: #fff;
+}
+
+.login-box div:hover {
+	color: #000;
+	background-color: #666;
+}
+
+.login-box label {
+	font-weight: bolder;
+	font-size: 16px;
+}
+
+body {
+	animation: ani-bg 5s linear infinite alternate-reverse;
+}
+
+@keyframes ani-bg{
+	0%{
+		background-color: #fff;
+	}
+	25% {
+		background-color: #ccc;
+	}
+	50% {
+		background-color: #bbb;
+	}
+	75% {
+		background-color: #ccc;
+	}
+	100% {
+		background-color: #fff;
+	}
+}

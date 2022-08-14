@@ -1,0 +1,173 @@
+<table class="menu-1">
+	<tr>
+		<td>
+			<div class="stock-barang">
+			</div>
+		</td>
+		<td>
+			<div class="edit-add"></div>
+			<div class="save-button button"><p>SIMPAN</p></div>
+			<div class="edit-button button"><p>UBAH</p></div>
+			<div class="delete-button button"><p>HAPUS</p></div>
+			<div class="cancel-button button"><p>BATALKAN</p></div>
+		</td>
+	</tr>
+</table>
+<script type="module">
+	import {convert_readable_num} from './dependencies/readable_num.mjs';
+
+	$(document).ready(function () {
+		let barang_active = Array();
+
+		function load_barang(){
+					$.ajax({url: 'http://localhost:8000/get_items', contentType: 'application/json', type: 'GET', headers: {"token": localStorage.getItem('Auth')}}).then((res)=>{
+			for (let item of res) {
+				$(`	<div>
+						<p>
+							${item.nama_barang}
+						</p>
+						<p>
+							Qty: ${item.qty}
+						</p>
+						<p>
+							Modal: ${convert_readable_num(item.harga_beli)}
+						</p>
+						<p>
+							Harga Jual: ${convert_readable_num(item.harga_jual)}
+						</p>
+					</div>`)
+					.attr('id', `${item.id_barang}`)
+					.addClass("barang")
+					.appendTo('.container .stock-barang')
+					.click(function(){
+						if($('.edit').html() === undefined && $('.add').html() === undefined){
+							$('.container .stock-barang .barang')
+							.removeClass("barang-active");
+							$(this).addClass("barang-active");
+							load_form();
+						}
+					});
+					barang_active[item.id_barang] = {
+						"nama_barang": item.nama_barang, 
+						"qty": item.qty, 
+						"harga_beli": item.harga_beli, 
+						"harga_jual": item.harga_jual
+					};
+				}
+				$(document.createElement('div')).addClass('add-btn').load('images/plus-icon.svg').click(()=>{
+				if ($('.edit').html() === undefined) {
+					$('.barang').removeClass('barang-active');
+					$('.edit-add').addClass('add');
+					load_form();
+				}
+			}).appendTo('.container .stock-barang');	
+		});
+		}
+
+		function load_form(opts){
+			if ($('.barang-active').html() !== undefined && 
+				$('.container .edit').html() 
+				!== undefined) {
+				$('.container .edit-add').load('templates/edit.html', function (){
+					$('#nama_barang').val(opts.nama_barang);
+					$('#qty').val(opts.qty);
+					$('#harga_beli').val(opts.harga_beli);
+					$('#harga_jual').val(opts.harga_jual);
+				});
+			}else if ($('.barang-active').html() === undefined && 
+				$('.container .add').html() 
+				!== undefined) {
+				$('.container .edit-add').load('templates/edit.html');
+			}else if($('.barang-active') !== undefined){
+				$('.container .edit-add').load('templates/add.html', function () {
+							$('.qty-add-btn').click(function () {
+								if($('#qty').val() !== '') {
+			if(confirm(`Continue adding +${$('#qty').val()} to ${barang_active[parseInt($('.barang-active').attr('id'))].nama_barang}`)){
+				$.ajax({url:`http://localhost:8000/add_qty/${$('.barang-active').attr('id')}?qty=${$('#qty').val()}`, headers: {"token": localStorage.getItem('Auth')}, contentType: "application/json", type:"PUT"}).then((res)=> {
+					$('.container .stock-barang').empty();
+					$('.edit-add').empty();
+					load_barang();
+				});
+			}
+		}
+		});
+				});
+			}
+		}
+		$('.edit-button').click(()=>{
+			if($('.add').html() === undefined && 
+				$('.barang-active').html() !== undefined){
+				$('.edit-add').addClass('edit');
+				load_form(barang_active[parseInt($('.barang-active').attr('id'))]);
+			}
+		});
+		load_barang();
+		$('.cancel-button').click(function () {
+			if($('.add').html() !== undefined 
+				|| $('.edit').html() !== undefined){
+				$('.edit-add').removeClass('edit').removeClass('add').empty();
+			}
+		});
+
+		$('.delete-button').click(function () {
+			if ($('.barang-active').html() !== undefined && confirm('Are you sure wanted to delete the item ?')) {
+				$.ajax({url: `http://localhost:8000/delete_item/${$(".barang-active").attr('id')}`, type: "delete", contentType: "application/json", headers: {"token": localStorage.getItem('Auth')}}).then((res)=>{
+					$('.cancel-button').click();
+					$('.container .stock-barang').empty();
+					load_barang();
+				});
+			}
+		});
+
+		$('.save-button').click(function () {
+			if($('#nama_barang').val() !== '' 
+				&& $('#qty').val() !== '' 
+				&& $('#harga_jual').val() !== '' 
+				&& $('#harga_beli').val() !== '' 
+				&& (
+					barang_active[parseInt($('.barang-active').attr('id') || '1')]
+					.nama_barang != $('#nama_barang').val()
+					|| barang_active[parseInt($('.barang-active').attr('id') || '1')]
+					.qty != $('#qty').val()
+					|| barang_active[parseInt($('.barang-active').attr('id') || '1')]
+					.harga_beli != $('#harga_beli').val()
+					|| barang_active[parseInt($('.barang-active').attr('id') || '1')]
+					.harga_jual != $('#harga_jual').val()
+					)
+				) {
+			if(($('.edit').html()!== undefined) 
+				&& confirm('Are you sure wanted to change this ?')){
+				$.ajax({url: `http://localhost:8000/update_item/${$('.barang-active').attr('id')}`, 
+						contentType: "application/json", type: "PUT", 
+						headers: {"token": localStorage.getItem('Auth')}, data: 
+						JSON.stringify({
+							"nama_barang": $('#nama_barang').val(), 
+							"qty": $('#qty').val(), 
+							"harga_beli": $('#harga_beli').val(), 
+							"harga_jual": $('#harga_jual').val() 
+						})})
+				.then(function (res) {
+					$('.container .stock-barang').empty();
+					$('.edit-add').empty().removeClass('edit');
+					load_barang();
+				});
+			} else if($('.add').html()!== undefined && confirm('Are you sure ?')) {
+				$.ajax({url: 'http://localhost:8000/new_item', 
+						contentType: "application/json", type: "POST", 
+						headers: {"token": localStorage.getItem('Auth')}, data: 
+						JSON.stringify({
+							"nama_barang": $('#nama_barang').val(), 
+							"qty": $('#qty').val(), 
+							"harga_beli": $('#harga_beli').val(), 
+							"harga_jual": $('#harga_jual').val() 
+						})})
+				.then(function (res) {
+					$('.container .stock-barang').empty();
+					$('.edit-add').empty().removeClass('add');
+					load_barang();
+				});
+			}
+		}
+		});
+	});
+</script>

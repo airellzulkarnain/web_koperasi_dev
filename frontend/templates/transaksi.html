@@ -1,0 +1,126 @@
+<table class="menu-2">
+	<tr>
+		<td>
+			<h1>Tambah Transaksi</h1>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="add-beli">
+				<h2>Nama Barang</h2>
+				<select name="barang" id="barang">
+					<option value="undefined">==Pilih Barang==</option>
+				</select>
+				<h2>Jumlah</h2>
+				<input type="number" name="jumlah" id="jumlah" placeholder="Jumlah" min="1">
+				<h2>Nama Pembeli</h2>
+				<input type="text" name="nama-pembeli" id="nama-pembeli" placeholder="Nama Pembeli">
+				<div class="button add-beli-btn"><p>TAMBAH</p></div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<h1>Transaksi</h1>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="records-beli">
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="button confirm-beli-btn"><p>KONFIRMASI</p></div>
+			<div class="button cancel-beli-btn"><p>HAPUS</p></div>
+		</td>
+	</tr>
+</table>
+<script type="module">
+	import {convert_readable_num} from './dependencies/readable_num.mjs';
+	$(document).ready(function () {
+		let barang_dipesan = Array();
+		 try{
+		 	barang_dipesan = JSON.parse(localStorage.getItem('barang_dipesan'))||Array();
+		 }catch(e){
+		 	barang_dipesan = Array();
+		 }
+		function load_barang() {
+			$.ajax({url: "http://localhost:8000/get_items", contentType: "application/json", type: "GET", headers: {"token": localStorage.getItem('Auth')}})
+			.then((responses)=>{
+				for(let res of responses){
+				$(document.createElement("option")).attr({'value': res.id_barang, 'harga': res.harga_jual}).text(res.nama_barang + ' - ' + (convert_readable_num(res.harga_jual)) + ' | Qty:'+ res.qty).appendTo("#barang");
+			}
+			});
+		}
+		load_barang();
+		try{
+			load_tambah_transaksi();
+		} catch (e){}
+		
+		function load_tambah_transaksi() {
+			$('.records-beli').empty();
+			try{
+			for(let barang of JSON.parse(localStorage.getItem('barang_dipesan'))){
+				$(`<div>
+					<p>Nama Barang: ${barang.barang}</p>
+					<p>Qty: ${barang.qty}</p>
+					<p>Harga: ${convert_readable_num(barang.harga)}</p>
+					<p>Nama Pembeli: ${barang.nama}</p>
+				</div>`)
+				.addClass('barang')
+				.appendTo('.records-beli');
+			}
+		}catch(e){}
+		}
+		$(".add-beli-btn").click(function () {
+			if (
+				$('#barang').val() !== 'undefined' 
+				&& $("#jumlah").val() !== '' 
+				&& $("#nama-pembeli").val() !== ''
+				) 
+			{
+				barang_dipesan.push({
+					"id_barang": $("#barang").val(),
+					"qty": $("#jumlah").val(),
+					"nama": $("#nama-pembeli").val(),
+					"harga": $("#barang").find(":selected").attr('harga'), 
+					"barang": $("#barang").find(":selected").text().split(' - Rp.', 1)[0]
+				});
+				localStorage.setItem('barang_dipesan', JSON.stringify(barang_dipesan));
+				load_tambah_transaksi();
+				$('#barang').val('undefined');
+				$('#jumlah').val(null);
+				$('#nama-pembeli').val(null);
+			}
+		});
+		$(".confirm-beli-btn").click(function () {
+			if(barang_dipesan.length > 0 && confirm('Lanjutkan Transaksi ?')){
+				for(let barang of barang_dipesan){
+					$.ajax({url: 'http://localhost:8000/beli', type: 'POST', contentType: 'application/json', headers: {'token': localStorage.getItem('Auth')}, data: JSON.stringify({"id_barang": barang.id_barang,"qty": barang.qty, "nama": barang.nama})}).then((res)=>{
+						if (res.status == "FAILED") {
+							alert(JSON.stringify(res));
+						}
+					}).catch((e)=>{
+						alert(JSON.stringify(e));
+					});	
+				}
+			localStorage.removeItem('barang_dipesan');
+			barang_dipesan = Array();
+			load_tambah_transaksi();
+			}
+		});
+		$(".cancel-beli-btn").click(function () {
+			if (barang_dipesan.length > 0 && confirm('Lanjutkan pembatalan ?')) {
+				localStorage.removeItem('barang_dipesan');
+				barang_dipesan = Array();
+				load_tambah_transaksi();
+			}
+		});
+		$('#barang').change(() => {$('#jumlah').focus();});
+		$('#jumlah').keyup((event) => {if(event.which === 13){$('#nama-pembeli').focus();}});
+		$('#nama-pembeli').keyup((event) => {if(event.which === 13){$('.add-beli-btn').click();}});
+
+	});
+</script>

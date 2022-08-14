@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="dependencies/jquery.js"></script>
+	<link rel="stylesheet" href="dependencies/style.css">
+	<link rel="icon" type="image/icon-x" href="favicon/some.ico">
+	<title>Program Koperasi</title>
+</head>
+<body>
+	<nav>
+		<div class="navbar-base">
+			<ul class="navbar-items clearfix">
+				<li>
+					<div class="stock-barang">Stock & Barang</div>
+				</li>
+				<li>
+					<div class="transaksi">Transaksi</div>
+				</li>
+				<li>
+					<div class="history-transaksi">History Transaksi</div>
+				</li>
+			</ul>
+			<div class="logout clearfix">Keluar</div>
+		</div>
+	</nav>
+	<main>
+		<div class="container">
+			
+		</div>
+	</main>
+	<script>
+		$(document).ready(function () {
+			if(localStorage.getItem('Auth') === null){
+				$('body').html(' ');
+				location.replace('login.html');
+			}else {
+			switch(localStorage.getItem('active-link')){
+				case 'transaksi':
+					$('.stock-barang').removeClass('active-link');
+					$('.transaksi').addClass('active-link');
+					$('.history-transaksi').removeClass('active-link');
+					$('.container').load('templates/transaksi.html');
+					break;
+				case 'history-transaksi':
+					$('.stock-barang').removeClass('active-link');
+					$('.transaksi').removeClass('active-link');
+					$('.history-transaksi').addClass('active-link');
+					$('.container').load('templates/history_transaksi.html');
+					break;
+				default: 
+					$('.stock-barang').addClass('active-link');
+					$('.transaksi').removeClass('active-link');
+					$('.history-transaksi').removeClass('active-link');
+					$('.container').load('templates/stock_barang.html');
+			}
+			$('.stock-barang').click(()=>{
+				$('.stock-barang').addClass('active-link');
+				$('.transaksi').removeClass('active-link');
+				$('.history-transaksi').removeClass('active-link');
+				$('.container').load('templates/stock_barang.html');
+				localStorage.setItem('active-link', 'stock-barang');
+			});
+			$('.transaksi').click(()=>{
+				$('.stock-barang').removeClass('active-link');
+				$('.transaksi').addClass('active-link');
+				$('.history-transaksi').removeClass('active-link');
+				$('.container').load('templates/transaksi.html');
+				localStorage.setItem('active-link', 'transaksi');
+			});
+			$('.history-transaksi').click(()=>{
+				$('.stock-barang').removeClass('active-link');
+				$('.transaksi').removeClass('active-link');
+				$('.history-transaksi').addClass('active-link');
+				$('.container').load('templates/history_transaksi.html');
+				localStorage.setItem('active-link', 'history-transaksi');
+			});
+			$('.logout').click(()=>{
+				localStorage.clear();
+				location.reload();
+			});
+		}
+		});
+	</script>
+</body>
+</html>
